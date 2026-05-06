@@ -9,7 +9,7 @@ import type {
   PaginatedResult,
   DataFilter,
 } from '@inferagraph/core';
-import type { FileDatasourceConfig, CsvLikeConfig, MarkdownConfig } from './types.js';
+import type { FileDataSourceConfig, CsvLikeConfig, MarkdownConfig } from './types.js';
 import { parseCsvFile } from './parsers/csv.js';
 import { parseMarkdownFolder } from './parsers/markdown.js';
 
@@ -25,10 +25,10 @@ import { parseMarkdownFolder } from './parsers/markdown.js';
  *   `content: ''` and `contentType: 'fields'`
  * - csv/tsv without `contentFields`: returns `undefined`
  */
-export class FileDatasource extends Datasource {
+export class FileDataSource extends Datasource {
   readonly name = 'file';
 
-  private readonly config: FileDatasourceConfig;
+  private readonly config: FileDataSourceConfig;
   private readonly idField: string;
 
   private adapter: StaticDataAdapter | null = null;
@@ -39,7 +39,7 @@ export class FileDatasource extends Datasource {
   // CSV/TSV row lookup for getContent metadata
   private csvRowsById: Map<string, Record<string, string>> = new Map();
 
-  constructor(config: FileDatasourceConfig) {
+  constructor(config: FileDataSourceConfig) {
     super();
     this.config = config;
     this.idField = config.idField ?? 'id';
@@ -153,7 +153,7 @@ export class FileDatasource extends Datasource {
       const missing = config.contentFields.filter((c) => !colSet.has(c));
       if (missing.length > 0) {
         throw new Error(
-          `FileDatasource: \`contentFields\` references unknown column(s): [${missing.join(', ')}]. Available columns: [${parsed.columns.join(', ')}].`,
+          `FileDataSource: \`contentFields\` references unknown column(s): [${missing.join(', ')}]. Available columns: [${parsed.columns.join(', ')}].`,
         );
       }
     }
@@ -162,7 +162,7 @@ export class FileDatasource extends Datasource {
       const idValue = row[this.idField];
       if (idValue === undefined || idValue === '') {
         throw new Error(
-          `FileDatasource: row is missing a value for idField '${this.idField}'.`,
+          `FileDataSource: row is missing a value for idField '${this.idField}'.`,
         );
       }
       const id = String(idValue);
@@ -193,7 +193,7 @@ export class FileDatasource extends Datasource {
 
   private ensureConnected(): void {
     if (!this.connected || !this.adapter) {
-      throw new Error('FileDatasource is not connected. Call connect() first.');
+      throw new Error('FileDataSource is not connected. Call connect() first.');
     }
   }
 }

@@ -52,14 +52,14 @@ export async function parseMarkdownFolder(
       if (missing.length > 0) parts.push(`missing: [${missing.join(', ')}]`);
       if (extra.length > 0) parts.push(`extra: [${extra.join(', ')}]`);
       throw new Error(
-        `FileDatasource: frontmatter mismatch in ${fileName} — ${parts.join('; ')}.`,
+        `FileDataSource: frontmatter mismatch in ${fileName} — ${parts.join('; ')}.`,
       );
     }
 
     const idValue = fmRecord[options.idField];
     if (idValue === undefined || idValue === null || idValue === '') {
       throw new Error(
-        `FileDatasource: file ${fileName} has no value for idField '${options.idField}'.`,
+        `FileDataSource: file ${fileName} has no value for idField '${options.idField}'.`,
       );
     }
 

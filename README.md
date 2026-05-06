@@ -1,11 +1,24 @@
-# @inferagraph/file-datasource
+# @inferagraph/file
 
 File-based datasource plugin for [@inferagraph/core](https://github.com/inferagraph/core). Loads nodes from delimited files (CSV/TSV) or a folder of Markdown files with frontmatter.
+
+## Migration from `@inferagraph/file-datasource`
+
+```bash
+pnpm remove @inferagraph/file-datasource
+pnpm add @inferagraph/file
+```
+
+The class was also renamed `FileDatasource` → `FileDataSource`. Most hosts can switch to the new factory:
+
+```typescript
+import { fileDataSource } from '@inferagraph/file';
+```
 
 ## Installation
 
 ```bash
-pnpm add @inferagraph/file-datasource @inferagraph/core
+pnpm add @inferagraph/file @inferagraph/core
 ```
 
 ## Usage
@@ -13,9 +26,9 @@ pnpm add @inferagraph/file-datasource @inferagraph/core
 ### CSV / TSV
 
 ```typescript
-import { FileDatasource } from '@inferagraph/file-datasource';
+import { fileDataSource } from '@inferagraph/file';
 
-const datasource = new FileDatasource({
+const datasource = fileDataSource({
   type: 'csv',
   path: './data/nodes.csv',
   hasHeader: true,           // first row contains column names
@@ -43,9 +56,9 @@ await datasource.disconnect();
 ### Markdown folder
 
 ```typescript
-import { FileDatasource } from '@inferagraph/file-datasource';
+import { fileDataSource } from '@inferagraph/file';
 
-const datasource = new FileDatasource({
+const datasource = fileDataSource({
   type: 'markdown',
   path: './data/nodes',                          // folder containing .md files
   frontmatter: ['id', 'name', 'type'],           // required keys per file (exact match)
@@ -58,6 +71,18 @@ await datasource.connect();
 // the body is exposed via getContent.
 const content = await datasource.getContent('n1');
 // { nodeId: 'n1', content: '<body markdown>', contentType: 'markdown' }
+```
+
+### Class escape hatch
+
+The factory is the preferred entry point, but the class is exported for hosts that need to subclass:
+
+```typescript
+import { FileDataSource } from '@inferagraph/file';
+
+class MyFileDataSource extends FileDataSource {
+  // ...
+}
 ```
 
 ## Configuration

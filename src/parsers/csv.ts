@@ -37,7 +37,7 @@ export async function parseCsvFile(
   if (records.length === 0) {
     if (!options.hasHeader && (!options.columns || options.columns.length === 0)) {
       throw new Error(
-        'FileDatasource: hasHeader=false requires non-empty `columns` configuration.',
+        'FileDataSource: hasHeader=false requires non-empty `columns` configuration.',
       );
     }
     return { columns: options.hasHeader ? [] : (options.columns ?? []), rows: [] };
@@ -52,12 +52,12 @@ export async function parseCsvFile(
   } else {
     if (!options.columns || options.columns.length === 0) {
       throw new Error(
-        'FileDatasource: hasHeader=false requires non-empty `columns` configuration.',
+        'FileDataSource: hasHeader=false requires non-empty `columns` configuration.',
       );
     }
     if (options.columns.length !== records[0].length) {
       throw new Error(
-        `FileDatasource: \`columns\` length (${options.columns.length}) does not match the parsed first row's field count (${records[0].length}).`,
+        `FileDataSource: \`columns\` length (${options.columns.length}) does not match the parsed first row's field count (${records[0].length}).`,
       );
     }
     columns = options.columns;

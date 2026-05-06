@@ -2,7 +2,7 @@ import type { EdgeData } from '@inferagraph/core';
 
 export type FileType = 'csv' | 'tsv' | 'markdown';
 
-export interface FileDatasourceConfigBase {
+export interface FileDataSourceConfigBase {
   /** Which file format to load */
   type: FileType;
   /** File path (csv/tsv) or folder path (markdown) */
@@ -13,7 +13,7 @@ export interface FileDatasourceConfigBase {
   idField?: string;
 }
 
-export interface CsvLikeConfig extends FileDatasourceConfigBase {
+export interface CsvLikeConfig extends FileDataSourceConfigBase {
   type: 'csv' | 'tsv';
   /** First row contains column names (default true) */
   hasHeader?: boolean;
@@ -23,10 +23,10 @@ export interface CsvLikeConfig extends FileDatasourceConfigBase {
   contentFields?: string[];
 }
 
-export interface MarkdownConfig extends FileDatasourceConfigBase {
+export interface MarkdownConfig extends FileDataSourceConfigBase {
   type: 'markdown';
   /** Required keys; each .md file must contain EXACTLY these keys (no more, no less) */
   frontmatter: string[];
 }
 
-export type FileDatasourceConfig = CsvLikeConfig | MarkdownConfig;
+export type FileDataSourceConfig = CsvLikeConfig | MarkdownConfig;

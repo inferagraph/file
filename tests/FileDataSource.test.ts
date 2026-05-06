@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { EdgeData } from '@inferagraph/core';
-import { FileDatasource } from '../src/FileDatasource.js';
+import { FileDataSource } from '../src/FileDataSource.js';
 
 const FIXTURES = join(__dirname, 'fixtures');
 
@@ -12,12 +12,12 @@ const sampleEdges: EdgeData[] = [
   { id: 'e2', sourceId: 'n2', targetId: 'n3', attributes: { type: 'lives_in' } },
 ];
 
-describe('FileDatasource', () => {
+describe('FileDataSource', () => {
   // --- Basic Properties ---
 
   describe('basic', () => {
     it('should have name "file"', () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         edges: [],
@@ -30,7 +30,7 @@ describe('FileDatasource', () => {
 
   describe('lifecycle', () => {
     it('should not be connected before connect()', () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         edges: [],
@@ -39,7 +39,7 @@ describe('FileDatasource', () => {
     });
 
     it('should be connected after connect()', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         edges: [],
@@ -49,7 +49,7 @@ describe('FileDatasource', () => {
     });
 
     it('should not be connected after disconnect()', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         edges: [],
@@ -60,7 +60,7 @@ describe('FileDatasource', () => {
     });
 
     it('should handle disconnect() without prior connect()', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         edges: [],
@@ -73,10 +73,10 @@ describe('FileDatasource', () => {
   // --- ensureConnected ---
 
   describe('ensureConnected', () => {
-    let ds: FileDatasource;
+    let ds: FileDataSource;
 
     beforeEach(() => {
-      ds = new FileDatasource({
+      ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         edges: [],
@@ -85,38 +85,38 @@ describe('FileDatasource', () => {
 
     it('throws on getInitialView before connect', async () => {
       await expect(ds.getInitialView()).rejects.toThrow(
-        'FileDatasource is not connected. Call connect() first.',
+        'FileDataSource is not connected. Call connect() first.',
       );
     });
 
     it('throws on getNode before connect', async () => {
-      await expect(ds.getNode('n1')).rejects.toThrow('FileDatasource is not connected');
+      await expect(ds.getNode('n1')).rejects.toThrow('FileDataSource is not connected');
     });
 
     it('throws on getNeighbors before connect', async () => {
-      await expect(ds.getNeighbors('n1')).rejects.toThrow('FileDatasource is not connected');
+      await expect(ds.getNeighbors('n1')).rejects.toThrow('FileDataSource is not connected');
     });
 
     it('throws on findPath before connect', async () => {
-      await expect(ds.findPath('n1', 'n2')).rejects.toThrow('FileDatasource is not connected');
+      await expect(ds.findPath('n1', 'n2')).rejects.toThrow('FileDataSource is not connected');
     });
 
     it('throws on search before connect', async () => {
-      await expect(ds.search('Adam')).rejects.toThrow('FileDatasource is not connected');
+      await expect(ds.search('Adam')).rejects.toThrow('FileDataSource is not connected');
     });
 
     it('throws on filter before connect', async () => {
-      await expect(ds.filter({})).rejects.toThrow('FileDatasource is not connected');
+      await expect(ds.filter({})).rejects.toThrow('FileDataSource is not connected');
     });
 
     it('throws on getContent before connect', async () => {
-      await expect(ds.getContent('n1')).rejects.toThrow('FileDatasource is not connected');
+      await expect(ds.getContent('n1')).rejects.toThrow('FileDataSource is not connected');
     });
 
     it('throws after disconnect()', async () => {
       await ds.connect();
       await ds.disconnect();
-      await expect(ds.getInitialView()).rejects.toThrow('FileDatasource is not connected');
+      await expect(ds.getInitialView()).rejects.toThrow('FileDataSource is not connected');
     });
   });
 
@@ -124,7 +124,7 @@ describe('FileDatasource', () => {
 
   describe('CSV with header', () => {
     it('parses nodes with column names from header', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         edges: sampleEdges,
@@ -148,7 +148,7 @@ describe('FileDatasource', () => {
       const filePath = join(tmp, 'nodes.csv');
       writeFileSync(filePath, 'slug,name\nadam,Adam\neve,Eve\n');
 
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: filePath,
         idField: 'slug',
@@ -167,7 +167,7 @@ describe('FileDatasource', () => {
 
   describe('CSV without header', () => {
     it('parses nodes with supplied column names', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-no-header.csv'),
         hasHeader: false,
@@ -183,7 +183,7 @@ describe('FileDatasource', () => {
     });
 
     it('throws when columns mismatch the parsed first row', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-no-header.csv'),
         hasHeader: false,
@@ -194,7 +194,7 @@ describe('FileDatasource', () => {
     });
 
     it('throws when hasHeader=false but no columns supplied', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-no-header.csv'),
         hasHeader: false,
@@ -208,7 +208,7 @@ describe('FileDatasource', () => {
 
   describe('TSV with header', () => {
     it('parses tab-delimited nodes', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'tsv',
         path: join(FIXTURES, 'nodes.tsv'),
         edges: [],
@@ -225,7 +225,7 @@ describe('FileDatasource', () => {
 
   describe('Markdown folder', () => {
     it('happy path: each .md becomes a node with frontmatter attributes; body via getContent', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'markdown',
         path: join(FIXTURES, 'markdown-good'),
         frontmatter: ['id', 'name', 'type'],
@@ -250,7 +250,7 @@ describe('FileDatasource', () => {
     });
 
     it('returns undefined getContent for unknown node', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'markdown',
         path: join(FIXTURES, 'markdown-good'),
         frontmatter: ['id', 'name', 'type'],
@@ -262,7 +262,7 @@ describe('FileDatasource', () => {
     });
 
     it('throws when a file has extra frontmatter keys', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'markdown',
         path: join(FIXTURES, 'markdown-extra-key'),
         frontmatter: ['id', 'name', 'type'],
@@ -272,7 +272,7 @@ describe('FileDatasource', () => {
     });
 
     it('throws when a file is missing required frontmatter keys', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'markdown',
         path: join(FIXTURES, 'markdown-missing-key'),
         frontmatter: ['id', 'name', 'type'],
@@ -289,7 +289,7 @@ describe('FileDatasource', () => {
       );
       writeFileSync(join(tmp, 'README.txt'), 'not markdown');
 
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'markdown',
         path: tmp,
         frontmatter: ['id', 'name'],
@@ -309,7 +309,7 @@ describe('FileDatasource', () => {
         join(tmp, 'a.md'),
         '---\nslug: alpha\nname: Alpha\n---\nbody\n',
       );
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'markdown',
         path: tmp,
         idField: 'slug',
@@ -328,7 +328,7 @@ describe('FileDatasource', () => {
 
   describe('edges supplied via config', () => {
     it('wires edges into the graph (verified via getNeighbors)', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         edges: sampleEdges,
@@ -343,7 +343,7 @@ describe('FileDatasource', () => {
     });
 
     it('findPath finds shortest path through supplied edges', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         edges: sampleEdges,
@@ -359,9 +359,9 @@ describe('FileDatasource', () => {
   // --- DataAdapter delegation ---
 
   describe('DataAdapter delegation', () => {
-    let ds: FileDatasource;
+    let ds: FileDataSource;
     beforeEach(async () => {
-      ds = new FileDatasource({
+      ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         edges: sampleEdges,
@@ -417,7 +417,7 @@ describe('FileDatasource', () => {
 
   describe('CSV getContent via contentFields', () => {
     it('returns undefined when contentFields is not set', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         edges: [],
@@ -428,7 +428,7 @@ describe('FileDatasource', () => {
     });
 
     it('returns ContentData with metadata when contentFields is set', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         contentFields: ['summary', 'name'],
@@ -444,7 +444,7 @@ describe('FileDatasource', () => {
     });
 
     it('throws on connect when contentFields references unknown column', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         contentFields: ['nope'],
@@ -454,7 +454,7 @@ describe('FileDatasource', () => {
     });
 
     it('returns undefined for unknown node id even with contentFields set', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         contentFields: ['summary'],
@@ -470,7 +470,7 @@ describe('FileDatasource', () => {
 
   describe('disconnect clears parsed state', () => {
     it('forces re-connect after disconnect', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: join(FIXTURES, 'nodes-with-header.csv'),
         edges: [],
@@ -488,7 +488,7 @@ describe('FileDatasource', () => {
 
   describe('error cases', () => {
     it('throws when CSV file does not exist', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'csv',
         path: '/nonexistent/path/to/file.csv',
         edges: [],
@@ -497,7 +497,7 @@ describe('FileDatasource', () => {
     });
 
     it('throws when markdown folder does not exist', async () => {
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'markdown',
         path: '/nonexistent/folder',
         frontmatter: ['id'],
@@ -508,7 +508,7 @@ describe('FileDatasource', () => {
 
     it('handles markdown folder with no .md files', async () => {
       const tmp = mkdtempSync(join(tmpdir(), 'iagf-empty-'));
-      const ds = new FileDatasource({
+      const ds = new FileDataSource({
         type: 'markdown',
         path: tmp,
         frontmatter: ['id'],
