@@ -1,4 +1,4 @@
-import type { EdgeData } from '@inferagraph/core';
+import type { EdgeData } from '@inferagraph/core/data';
 
 export type FileType = 'csv' | 'tsv' | 'markdown';
 

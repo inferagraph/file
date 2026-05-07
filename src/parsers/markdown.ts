@@ -1,7 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import matter from 'gray-matter';
-import type { NodeData } from '@inferagraph/core';
+import type { NodeData } from '@inferagraph/core/data';
 
 export interface ParseMarkdownOptions {
   /** Required frontmatter keys; each file must contain EXACTLY this set */

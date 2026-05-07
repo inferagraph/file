@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import type { EdgeData } from '@inferagraph/core';
+import type { EdgeData } from '@inferagraph/core/data';
 import { FileDataSource } from '../src/FileDataSource.js';
 
 const FIXTURES = join(__dirname, 'fixtures');

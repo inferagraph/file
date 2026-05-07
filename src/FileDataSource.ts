@@ -1,4 +1,4 @@
-import { DataSource, StaticDataAdapter } from '@inferagraph/core';
+import { DataSource, StaticDataAdapter } from '@inferagraph/core/data';
 import type {
   DataAdapterConfig,
   GraphData,
@@ -8,7 +8,7 @@ import type {
   PaginationOptions,
   PaginatedResult,
   DataFilter,
-} from '@inferagraph/core';
+} from '@inferagraph/core/data';
 import type { FileDataSourceConfig, CsvLikeConfig, MarkdownConfig } from './types.js';
 import { parseCsvFile } from './parsers/csv.js';
 import { parseMarkdownFolder } from './parsers/markdown.js';

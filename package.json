@@ -1,6 +1,6 @@
 {
   "name": "@inferagraph/file",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "description": "File datasource for InferaGraph (CSV, TSV, Markdown folders)",
   "repository": { "type": "git", "url": "git+https://github.com/inferagraph/file-datasource.git" },
