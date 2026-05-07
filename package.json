@@ -3,7 +3,7 @@
   "version": "0.2.1",
   "type": "module",
   "description": "File datasource for InferaGraph (CSV, TSV, Markdown folders)",
-  "repository": { "type": "git", "url": "git+https://github.com/inferagraph/file-datasource.git" },
+  "repository": { "type": "git", "url": "git+https://github.com/inferagraph/file.git" },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
