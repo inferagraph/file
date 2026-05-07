@@ -1,4 +1,4 @@
-import { Datasource, StaticDataAdapter } from '@inferagraph/core';
+import { DataSource, StaticDataAdapter } from '@inferagraph/core';
 import type {
   DataAdapterConfig,
   GraphData,
@@ -14,7 +14,7 @@ import { parseCsvFile } from './parsers/csv.js';
 import { parseMarkdownFolder } from './parsers/markdown.js';
 
 /**
- * Datasource that loads nodes from delimited files (CSV/TSV) or a folder
+ * DataSource that loads nodes from delimited files (CSV/TSV) or a folder
  * of Markdown files with frontmatter. Edges are host-supplied via config.
  *
  * After parsing, an internal {@link StaticDataAdapter} handles all graph
@@ -25,7 +25,7 @@ import { parseMarkdownFolder } from './parsers/markdown.js';
  *   `content: ''` and `contentType: 'fields'`
  * - csv/tsv without `contentFields`: returns `undefined`
  */
-export class FileDataSource extends Datasource {
+export class FileDataSource extends DataSource {
   readonly name = 'file';
 
   private readonly config: FileDataSourceConfig;

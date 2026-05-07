@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { Datasource } from '@inferagraph/core';
+import { DataSource } from '@inferagraph/core';
 import {
   FileDataSource,
   fileDataSource,
@@ -26,7 +26,7 @@ describe('FileDataSource (renamed class)', () => {
       path: join(FIXTURES, 'nodes-with-header.csv'),
       edges: [],
     });
-    expect(ds).toBeInstanceOf(Datasource);
+    expect(ds).toBeInstanceOf(DataSource);
     expect(ds.name).toBe('file');
     await ds.connect();
     expect(ds.isConnected()).toBe(true);
@@ -35,13 +35,13 @@ describe('FileDataSource (renamed class)', () => {
 });
 
 describe('fileDataSource factory', () => {
-  it('returns a DataSource-shaped instance (extends Datasource)', () => {
+  it('returns a DataSource-shaped instance (extends DataSource)', () => {
     const ds = fileDataSource({
       type: 'csv',
       path: join(FIXTURES, 'nodes-with-header.csv'),
       edges: [],
     });
-    expect(ds).toBeInstanceOf(Datasource);
+    expect(ds).toBeInstanceOf(DataSource);
   });
 
   it('factory result behaves like the class (connect + getInitialView)', async () => {
